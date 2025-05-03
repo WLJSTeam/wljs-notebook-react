@@ -1,0 +1,8 @@
+{
+    "name": "wljs-notebook-react",
+    "version": "1.0.0",
+    "dependencies": {
+      "fs-extra": "^11.3.0"
+    },
+    "license": "GPL-3.0-only"
+  }
