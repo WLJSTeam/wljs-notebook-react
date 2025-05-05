@@ -1,6 +1,6 @@
 # WLJS Notebook MDX Library
 
-A React component library that helps render notebooks or individual cells exported to MDX format, preserving interactivity and outputs on your blog, documentation, or any React-based/static MDX site.
+A React component library that helps render notebooks or individual cells [exported to MDX format](https://wljs.io/frontend/Exporting/MDX), preserving interactivity and outputs on your blog, documentation, or any React-based/static MDX site.
 
 *Currently this is a working prototype*
 
