@@ -14,7 +14,7 @@ See how to export your notebooks to MDX [here].
 
 - Embed interactive widgets or 3D figures into a blog page
 
-This library is used on [wljs.io](https://wljs.io) documentation pages. __See a basic Next.js template__ for hosting WLJS Notebooks as MDX files.
+This library is used on [wljs.io](https://wljs.io) documentation pages. [__See a basic Next.js template__](https://github.com/JerryI/wljs-nextjs-example) for hosting WLJS Notebooks as MDX files.
 
 ## Exports
 
@@ -25,6 +25,10 @@ This library is used on [wljs.io](https://wljs.io) documentation pages. __See a 
 - `WLJSStore` (only once per page): Loads heavy content like 3D graph data, hash maps for interactive widgets, etc.
 - `WLJSEditor`: Renders an input/output cell
 - `WLJSHTML`: Renders raw HTML content
+
+### Global classes
+You can stylize code cells globally using this export
+- `DefaultClasses`
 
 ### Header Scripts
 

@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const crypto = require('crypto');
 
-module.exports = function remarkCopyAttachments({ fromDir, publicDir }) {
+module.exports = function remarkCopyAttachments({ fromDir, publicDir, baseURL = '' }) {
   return async function transformer(tree, file) {
     const promises = [];
 
@@ -38,7 +38,16 @@ module.exports = function remarkCopyAttachments({ fromDir, publicDir }) {
               );
 
               // Rewrite the JSX prop value
-              attr.value = publicPath;
+              if (baseURL.length == 0) {
+                attr.value = publicPath;
+              } else {
+                if (baseURL.charAt(baseURL.length-1) == '/') {
+                  attr.value = baseURL.slice(0,-1) + publicPath;
+                } else {
+                  attr.value = baseURL + publicPath;
+                }
+              }
+              
             }
           }
         }
