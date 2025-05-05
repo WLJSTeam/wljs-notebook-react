@@ -1,8 +1,23 @@
 {
-    "name": "wljs-notebook-react",
-    "version": "1.0.0",
-    "dependencies": {
-      "fs-extra": "^11.3.0"
-    },
-    "license": "GPL-3.0-only"
-  }
+  "name": "wljs-notebook-react",
+  "version": "1.0.0",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "dependencies": {
+    "fs-extra": "^11.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "@babel/preset-react": "^7.22.5",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "rollup": "^3.29.4"
+  },
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JerryI/wljs-notebook-react.git"
+  },
+}

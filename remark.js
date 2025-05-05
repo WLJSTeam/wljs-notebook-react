@@ -6,7 +6,7 @@ module.exports = function remarkCopyAttachments({ fromDir, publicDir }) {
   return async function transformer(tree, file) {
     const promises = [];
 
-
+ 
 
     function hashFilePath(filepath) {
       return crypto.createHash('md5').update(filepath).digest('hex').slice(0, 8);
