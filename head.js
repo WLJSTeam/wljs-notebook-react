@@ -3,6 +3,10 @@ const scripts = [
      
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-interpreter@base/dist/interpreter.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-interpreter@base/src/core.js",
+
+    "https://cdn.jsdelivr.net/gh/JerryI/wljs-export-html@base/Formats/MDX/Polyfill.js",
+    "https://cdn.jsdelivr.net/gh/JerryI/wljs-export-html@base/DynamicsTools/Runners.js",
+
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-cells@base/src/module.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-editor@base/dist/kernel.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-editor@base/src/boxes.js",  
@@ -24,6 +28,8 @@ const scripts = [
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-graphics-d3@base/dist/kernel.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-plotly@base/dist/kernel.js",  
     "https://cdn.jsdelivr.net/gh/JerryI/Mathematica-ThreeJS-graphics-engine@base/dist/kernel.js",
+
+
   
   ].map((link) => {
     return {

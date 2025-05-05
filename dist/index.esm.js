@@ -8,9 +8,6 @@ function _arrayLikeToArray(r, a) {
 function _arrayWithHoles(r) {
   if (Array.isArray(r)) return r;
 }
-function _arrayWithoutHoles(r) {
-  if (Array.isArray(r)) return _arrayLikeToArray(r);
-}
 function asyncGeneratorStep(n, t, e, r, o, a, c) {
   try {
     var i = n[a](c),
@@ -35,79 +32,6 @@ function _asyncToGenerator(n) {
       _next(void 0);
     });
   };
-}
-function _classCallCheck(a, n) {
-  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
-}
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
-  }
-}
-function _createClass(e, r, t) {
-  return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-    writable: !1
-  }), e;
-}
-function _createForOfIteratorHelper(r, e) {
-  var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
-  if (!t) {
-    if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) {
-      t && (r = t);
-      var n = 0,
-        F = function () {};
-      return {
-        s: F,
-        n: function () {
-          return n >= r.length ? {
-            done: !0
-          } : {
-            done: !1,
-            value: r[n++]
-          };
-        },
-        e: function (r) {
-          throw r;
-        },
-        f: F
-      };
-    }
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  var o,
-    a = !0,
-    u = !1;
-  return {
-    s: function () {
-      t = t.call(r);
-    },
-    n: function () {
-      var r = t.next();
-      return a = r.done, r;
-    },
-    e: function (r) {
-      u = !0, o = r;
-    },
-    f: function () {
-      try {
-        a || null == t.return || t.return();
-      } finally {
-        if (u) throw o;
-      }
-    }
-  };
-}
-function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function _iterableToArray(r) {
-  if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
 }
 function _iterableToArrayLimit(r, l) {
   var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
@@ -138,30 +62,6 @@ function _iterableToArrayLimit(r, l) {
 }
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function ownKeys(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, o);
-  }
-  return t;
-}
-function _objectSpread2(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
-      _defineProperty(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
 }
 function _regeneratorRuntime() {
   _regeneratorRuntime = function () {
@@ -435,23 +335,6 @@ function _regeneratorRuntime() {
 function _slicedToArray(r, e) {
   return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
 }
-function _toConsumableArray(r) {
-  return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
-}
-function _toPrimitive(t, r) {
-  if ("object" != typeof t || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r || "default");
-    if ("object" != typeof i) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r ? String : Number)(t);
-}
-function _toPropertyKey(t) {
-  var i = _toPrimitive(t, "string");
-  return "symbol" == typeof i ? i : i + "";
-}
 function _unsupportedIterableToArray(r, a) {
   if (r) {
     if ("string" == typeof r) return _arrayLikeToArray(r, a);
@@ -485,799 +368,54 @@ var DefaultClasses = {
     placeholder: 'opacity-0'
   }
 };
+
+/* pls, don't look at here. We don't know react and WLJS Ecosystem was not targeted to be used with JS frameworks */
+/* its ugly, but it gonna work, for sure */
+
 function WLJSStore(_ref) {
   var json = _ref.json,
     notebook = _ref.notebook,
     kernel = _ref.kernel;
   useEffect(function () {
     console.log('Created store');
-    var promises = {};
-    var symbols = {};
-    var eventsPool = [];
-    var allGood = new Deferred();
-    window.server = {
-      kernel: {
-        io: {
-          fire: function fire(uid, payload) {
-            var pattern = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "Default";
-            eventsPool.push(['fire', uid, payload, pattern]);
-          },
-          poke: function poke(uid) {
-            eventsPool.push(['poke', uid]);
-          }
-        }
-      }
-    };
-    window.server.kernel.emitt = function () {
-      console.warn('Emitt is not supported anymore');
-    };
-    var _fetchFile = /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-          while (1) switch (_context6.prev = _context6.next) {
+    var virtualServer = window.server;
+    virtualServer.resetIO();
+    var loadKernel = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var mesh;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
             case 0:
-              _fetchFile = /*#__PURE__*/function () {
-                var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-                  return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) switch (_context.prev = _context.next) {
-                      case 0:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }, _callee);
-                }));
-                return function _fetchFile() {
-                  return _ref3.apply(this, arguments);
-                };
-              }();
-              fetch(json).then(function (data) {
-                console.warn('Store loaded!');
-                data.json().then(function (result) {
-                  interpretate(result.objects, {
-                    hold: true
-                  }).then(function (i) {
-                    console.warn('Objects loaded!');
-                    Object.keys(i).forEach(function (oName) {
-                      var obj = new ObjectStorage(oName);
-                      obj.cache = i[oName];
-                      obj.cached = true;
-                    });
-                    Object.keys(promises).forEach(function (key) {
-                      if (Array.isArray(promises[key])) {
-                        promises[key].forEach(function (el) {
-                          return el.resolve(i[key]);
-                        });
-                      } else {
-                        promises[key].resolve(i[key]);
-                      }
-                    });
-                  });
-                  interpretate(result.symbols, {
-                    hold: true
-                  }).then(function (i) {
-                    console.warn('Symbols loaded!');
-                    Object.keys(i).forEach(function (oName) {
-                      core[oName] = /*#__PURE__*/function () {
-                        var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(args, env) {
-                          var data;
-                          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                            while (1) switch (_context2.prev = _context2.next) {
-                              case 0:
-                                _context2.next = 2;
-                                return interpretate(core[oName].data, env);
-                              case 2:
-                                data = _context2.sent;
-                                return _context2.abrupt("return", data);
-                              case 4:
-                              case "end":
-                                return _context2.stop();
-                            }
-                          }, _callee2);
-                        }));
-                        return function (_x, _x2) {
-                          return _ref4.apply(this, arguments);
-                        };
-                      }();
-                      core[oName].data = i[oName];
-                      core[oName] = /*#__PURE__*/function () {
-                        var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(args, env) {
-                          var data;
-                          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                            while (1) switch (_context3.prev = _context3.next) {
-                              case 0:
-                                console.log('IE: calling our symbol...');
-                                //evaluate in the context
-                                _context3.next = 3;
-                                return interpretate(core[oName].data, env);
-                              case 3:
-                                data = _context3.sent;
-                                if (env.root && !env.novirtual) core[oName].instances[env.root.uid] = env.root; //if it was evaluated insdide the container, then, add it to the tracking list
-                                //if (env.hold) return ['JSObject', core[name].data];
-                                return _context3.abrupt("return", data);
-                              case 6:
-                              case "end":
-                                return _context3.stop();
-                            }
-                          }, _callee3);
-                        }));
-                        return function (_x3, _x4) {
-                          return _ref5.apply(this, arguments);
-                        };
-                      }();
-                      core[oName].update = /*#__PURE__*/function () {
-                        var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(args, env) {
-                          var data;
-                          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                            while (1) switch (_context4.prev = _context4.next) {
-                              case 0:
-                                if (!env.useCache) {
-                                  _context4.next = 7;
-                                  break;
-                                }
-                                if (!(!core[oName].cached || core[oName].currentData != core[oName].data)) {
-                                  _context4.next = 6;
-                                  break;
-                                }
-                                _context4.next = 4;
-                                return interpretate(core[oName].data, env);
-                              case 4:
-                                core[oName].cached = _context4.sent;
-                                core[oName].currentData = core[oName].data; //just copy the reference
-                                //console.log('cache miss');
-                              case 6:
-                                return _context4.abrupt("return", core[oName].cached);
-                              case 7:
-                                _context4.next = 9;
-                                return interpretate(core[oName].data, env);
-                              case 9:
-                                data = _context4.sent;
-                                return _context4.abrupt("return", data);
-                              case 11:
-                              case "end":
-                                return _context4.stop();
-                            }
-                          }, _callee4);
-                        }));
-                        return function (_x5, _x6) {
-                          return _ref6.apply(this, arguments);
-                        };
-                      }();
-                      core[oName].destroy = /*#__PURE__*/function () {
-                        var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(args, env) {
-                          return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-                            while (1) switch (_context5.prev = _context5.next) {
-                              case 0:
-                                delete core[oName].instances[env.root.uid];
-                                console.warn(env.root.uid + ' was destroyed');
-                                console.warn('external symbol was destoryed');
-                              case 3:
-                              case "end":
-                                return _context5.stop();
-                            }
-                          }, _callee5);
-                        }));
-                        return function (_x7, _x8) {
-                          return _ref7.apply(this, arguments);
-                        };
-                      }();
-                      core[oName].data = structuredClone(i[oName]); //get the data
-
-                      core[oName].virtual = true;
-                      core[oName].instances = {};
-                    });
-                    Object.keys(symbols).forEach(function (key) {
-                      console.warn(key);
-                      symbols[key].resolve(i[key]);
-                    });
-                    allGood.resolve(); // final point
-                  });
-                });
-              });
+              _context.next = 2;
+              return fetch(kernel);
             case 2:
+              mesh = _context.sent;
+              _context.next = 5;
+              return mesh.json();
+            case 5:
+              mesh = _context.sent;
+              _context.next = 8;
+              return virtualServer.loadKernel(mesh);
+            case 8:
+              virtualServer.flushEvents();
+            case 9:
             case "end":
-              return _context6.stop();
+              return _context.stop();
           }
-        }, _callee6);
+        }, _callee);
       }));
-      return function fetchFile() {
+      return function loadKernel() {
         return _ref2.apply(this, arguments);
       };
     }();
-    var loadKernel = /*#__PURE__*/function () {
-      var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
-        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
-          while (1) switch (_context13.prev = _context13.next) {
-            case 0:
-              console.warn('Kernel');
-              if (kernel) {
-                console.warn('KERNEL');
-                fetch(kernel).then(function (data) {
-                  console.log(data);
-                  data.json().then(/*#__PURE__*/function () {
-                    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(result) {
-                      var BlackBox, cryptoHash, virtualMachinesData, virtualMachines, _iterator, _step, machine, bbox, length;
-                      return _regeneratorRuntime().wrap(function _callee12$(_context12) {
-                        while (1) switch (_context12.prev = _context12.next) {
-                          case 0:
-                            BlackBox = {};
-                            cryptoHash = /*#__PURE__*/function () {
-                              var _ref0 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(message) {
-                                var msgUint8, hashBuffer, hashArray, hashHex;
-                                return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-                                  while (1) switch (_context7.prev = _context7.next) {
-                                    case 0:
-                                      msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
-                                      _context7.next = 3;
-                                      return window.crypto.subtle.digest("SHA-1", msgUint8);
-                                    case 3:
-                                      hashBuffer = _context7.sent;
-                                      // hash the message
-                                      hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
-                                      hashHex = hashArray.map(function (b) {
-                                        return b.toString(16).padStart(2, "0");
-                                      }).join(""); // convert bytes to hex string
-                                      return _context7.abrupt("return", hashHex);
-                                    case 7:
-                                    case "end":
-                                      return _context7.stop();
-                                  }
-                                }, _callee7);
-                              }));
-                              return function cryptoHash(_x0) {
-                                return _ref0.apply(this, arguments);
-                              };
-                            }();
-                            BlackBox.StateMachine = /*#__PURE__*/function () {
-                              function _class() {
-                                _classCallCheck(this, _class);
-                                this.map = new Map();
-                                this.state = [];
-                                this.symbol = null;
-                                this.eventsMap = new Map();
-                              }
-                              return _createClass(_class, [{
-                                key: "init",
-                                value: function () {
-                                  var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(machineData) {
-                                    var string, parsed, self;
-                                    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-                                      while (1) switch (_context8.prev = _context8.next) {
-                                        case 0:
-                                          _context8.next = 2;
-                                          return interpretate.unzlib64String(machineData.CompressedMap);
-                                        case 2:
-                                          string = _context8.sent;
-                                          parsed = JSON.parse(string);
-                                          this.map = new Map(parsed);
-                                          this.symbol = machineData.Symbol;
-                                          this.state = _toConsumableArray(machineData.InitialValues);
-                                          this.eventsMap = new Map();
-                                          self = this;
-                                          machineData.Events.forEach(function (el, index) {
-                                            self.eventsMap.set(el[0] + '::' + el[1], index);
-                                          });
-                                          delete machineData.CompressedMap;
-                                          return _context8.abrupt("return", this);
-                                        case 12:
-                                        case "end":
-                                          return _context8.stop();
-                                      }
-                                    }, _callee8, this);
-                                  }));
-                                  function init(_x1) {
-                                    return _init.apply(this, arguments);
-                                  }
-                                  return init;
-                                }()
-                              }, {
-                                key: "run",
-                                value: function () {
-                                  var _run = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(evId, payload, pattern) {
-                                    var uid, index, hash, symbol, _i, _Object$values, inst;
-                                    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-                                      while (1) switch (_context9.prev = _context9.next) {
-                                        case 0:
-                                          uid = evId + '::' + pattern;
-                                          if (this.eventsMap.has(uid)) {
-                                            _context9.next = 3;
-                                            break;
-                                          }
-                                          return _context9.abrupt("return");
-                                        case 3:
-                                          index = this.eventsMap.get(uid);
-                                          this.state[index] = payload;
-                                          _context9.next = 7;
-                                          return cryptoHash(JSON.stringify(this.state));
-                                        case 7:
-                                          hash = _context9.sent;
-                                          if (this.map.has(hash)) {
-                                            _context9.next = 10;
-                                            break;
-                                          }
-                                          return _context9.abrupt("return");
-                                        case 10:
-                                          symbol = core[this.symbol];
-                                          symbol.data = ['JSObject', structuredClone(this.map.get(hash))];
-                                          _i = 0, _Object$values = Object.values(symbol.instances);
-                                        case 13:
-                                          if (!(_i < _Object$values.length)) {
-                                            _context9.next = 22;
-                                            break;
-                                          }
-                                          inst = _Object$values[_i];
-                                          if (!inst.dead) {
-                                            _context9.next = 17;
-                                            break;
-                                          }
-                                          return _context9.abrupt("continue", 19);
-                                        case 17:
-                                          _context9.next = 19;
-                                          return inst.update();
-                                        case 19:
-                                          _i++;
-                                          _context9.next = 13;
-                                          break;
-                                        case 22:
-                                        case 23:
-                                        case "end":
-                                          return _context9.stop();
-                                      }
-                                    }, _callee9, this);
-                                  }));
-                                  function run(_x10, _x11, _x12) {
-                                    return _run.apply(this, arguments);
-                                  }
-                                  return run;
-                                }()
-                              }]);
-                            }();
-                            BlackBox.PavlovMachine = /*#__PURE__*/function () {
-                              function _class2() {
-                                _classCallCheck(this, _class2);
-                                this.map = new Map();
-                                this.eventsMap = new Map();
-                              }
-                              return _createClass(_class2, [{
-                                key: "init",
-                                value: function () {
-                                  var _init2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee0(machineData) {
-                                    var string, parsed, self;
-                                    return _regeneratorRuntime().wrap(function _callee0$(_context0) {
-                                      while (1) switch (_context0.prev = _context0.next) {
-                                        case 0:
-                                          _context0.next = 2;
-                                          return interpretate.unzlib64String(machineData.CompressedMap);
-                                        case 2:
-                                          string = _context0.sent;
-                                          parsed = JSON.parse(string);
-                                          this.map = new Map(parsed);
-                                          this.eventsMap = new Map();
-                                          self = this;
-                                          machineData.Events.forEach(function (el) {
-                                            self.eventsMap.set(el[0] + '::' + el[1]);
-                                          });
-                                          delete machineData.CompressedMap;
-                                          return _context0.abrupt("return", this);
-                                        case 10:
-                                        case "end":
-                                          return _context0.stop();
-                                      }
-                                    }, _callee0, this);
-                                  }));
-                                  function init(_x13) {
-                                    return _init2.apply(this, arguments);
-                                  }
-                                  return init;
-                                }()
-                              }, {
-                                key: "run",
-                                value: function () {
-                                  var _run2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee1(evId, payload, pattern) {
-                                    var uid, hash, global, local;
-                                    return _regeneratorRuntime().wrap(function _callee1$(_context1) {
-                                      while (1) switch (_context1.prev = _context1.next) {
-                                        case 0:
-                                          uid = evId + '::' + pattern;
-                                          if (this.eventsMap.has(uid)) {
-                                            _context1.next = 3;
-                                            break;
-                                          }
-                                          return _context1.abrupt("return");
-                                        case 3:
-                                          _context1.next = 5;
-                                          return cryptoHash(JSON.stringify([evId, pattern, payload]));
-                                        case 5:
-                                          hash = _context1.sent;
-                                          if (this.map.has(hash)) {
-                                            _context1.next = 8;
-                                            break;
-                                          }
-                                          return _context1.abrupt("return");
-                                        case 8:
-                                          global = {};
-                                          local = {};
-                                          interpretate(JSON.parse(this.map.get(hash)), {
-                                            global: global,
-                                            local: local
-                                          });
-                                        case 11:
-                                        case "end":
-                                          return _context1.stop();
-                                      }
-                                    }, _callee1, this);
-                                  }));
-                                  function run(_x14, _x15, _x16) {
-                                    return _run2.apply(this, arguments);
-                                  }
-                                  return run;
-                                }()
-                              }]);
-                            }();
-                            BlackBox.AnimationMachine = /*#__PURE__*/function () {
-                              function _class3() {
-                                _classCallCheck(this, _class3);
-                              }
-                              return _createClass(_class3, [{
-                                key: "init",
-                                value: function () {
-                                  var _init3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(machineData) {
-                                    var string, parsed;
-                                    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-                                      while (1) switch (_context10.prev = _context10.next) {
-                                        case 0:
-                                          _context10.next = 2;
-                                          return interpretate.unzlib64String(machineData.Compressed);
-                                        case 2:
-                                          string = _context10.sent;
-                                          parsed = JSON.parse(string);
-                                          this.values = parsed;
-                                          this.count = 0;
-                                          this.parity = true;
-                                          this.symbol = machineData.Symbol;
-                                          this.hash = machineData.HashState;
-                                          this.eventId = machineData.Event[0];
-                                          return _context10.abrupt("return", this);
-                                        case 11:
-                                        case "end":
-                                          return _context10.stop();
-                                      }
-                                    }, _callee10, this);
-                                  }));
-                                  function init(_x17) {
-                                    return _init3.apply(this, arguments);
-                                  }
-                                  return init;
-                                }()
-                              }, {
-                                key: "run",
-                                value: function () {
-                                  var _run3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(evId, payload, pattern) {
-                                    var symbol, _i2, _Object$values2, inst;
-                                    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-                                      while (1) switch (_context11.prev = _context11.next) {
-                                        case 0:
-                                          if (!(this.eventId != evId)) {
-                                            _context11.next = 2;
-                                            break;
-                                          }
-                                          return _context11.abrupt("return");
-                                        case 2:
-                                          symbol = core[this.symbol];
-                                          symbol.data = ['JSObject', structuredClone(this.values[this.count])];
-                                          _i2 = 0, _Object$values2 = Object.values(symbol.instances);
-                                        case 5:
-                                          if (!(_i2 < _Object$values2.length)) {
-                                            _context11.next = 14;
-                                            break;
-                                          }
-                                          inst = _Object$values2[_i2];
-                                          if (!inst.dead) {
-                                            _context11.next = 9;
-                                            break;
-                                          }
-                                          return _context11.abrupt("continue", 11);
-                                        case 9:
-                                          _context11.next = 11;
-                                          return inst.update();
-                                        case 11:
-                                          _i2++;
-                                          _context11.next = 5;
-                                          break;
-                                        case 14:
-                                          if (!this.parity) this.count++;
-                                          this.parity = !this.parity; //animate on 2
-                                          if (this.values.length == this.count) this.count = 0;
-                                        case 18:
-                                        case "end":
-                                          return _context11.stop();
-                                      }
-                                    }, _callee11, this);
-                                  }));
-                                  function run(_x18, _x19, _x20) {
-                                    return _run3.apply(this, arguments);
-                                  }
-                                  return run;
-                                }()
-                              }]);
-                            }();
-                            _context12.next = 7;
-                            return interpretate(result, {});
-                          case 7:
-                            virtualMachinesData = _context12.sent;
-                            virtualMachines = [];
-                            _iterator = _createForOfIteratorHelper(virtualMachinesData);
-                            _context12.prev = 10;
-                            _iterator.s();
-                          case 12:
-                            if ((_step = _iterator.n()).done) {
-                              _context12.next = 20;
-                              break;
-                            }
-                            machine = _step.value;
-                            bbox = new BlackBox[machine.Class]();
-                            _context12.next = 17;
-                            return bbox.init(machine);
-                          case 17:
-                            virtualMachines.push(bbox);
-                          case 18:
-                            _context12.next = 12;
-                            break;
-                          case 20:
-                            _context12.next = 25;
-                            break;
-                          case 22:
-                            _context12.prev = 22;
-                            _context12.t0 = _context12["catch"](10);
-                            _iterator.e(_context12.t0);
-                          case 25:
-                            _context12.prev = 25;
-                            _iterator.f();
-                            return _context12.finish(25);
-                          case 28:
-                            length = virtualMachines.length;
-                            window.server.kernel = {
-                              io: {
-                                fire: function fire(evId, payload) {
-                                  var pattern = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "Default";
-                                  for (var i = 0; i < length; ++i) virtualMachines[i].run(evId, payload, pattern);
-                                },
-                                poke: function poke(evId) {
-                                  for (var i = 0; i < length; ++i) virtualMachines[i].run(evId, true, 'Default');
-                                }
-                              }
-                            };
-                            eventsPool.forEach(function (ev) {
-                              if (ev[0] == 'fire') {
-                                window.server.kernel.io.fire(ev[1], ev[2], ev[3]);
-                              } else if (ev[0] == 'poke') {
-                                window.server.kernel.io.poke(ev[1]);
-                              }
-                            });
-                            eventsPool = [];
-
-                            //eventsPool.forEach((ev) => window.server.kernel.emitt(ev.uid, ev.data, ev.type));
-                          case 32:
-                          case "end":
-                            return _context12.stop();
-                        }
-                      }, _callee12, null, [[10, 22, 25, 28]]);
-                    }));
-                    return function (_x9) {
-                      return _ref9.apply(this, arguments);
-                    };
-                  }());
-                });
-              }
-            case 2:
-            case "end":
-              return _context13.stop();
-          }
-        }, _callee13);
-      }));
-      return function loadKernel() {
-        return _ref8.apply(this, arguments);
-      };
-    }();
-    core.Offload = function (args, env) {
-      if (args.length > 1) {
-        //alternative path - checking options
-        //do it in ugly superfast way
-        if (args[1][1] === "'Static'") {
-          if (args[1][2]) {
-            return interpretate(args[0], _objectSpread2(_objectSpread2({}, env), {}, {
-              "static": true
-            }));
-          }
-        } else if (args.length > 2) {
-          if (args[2][1] === "'Static'") {
-            if (args[2][2]) {
-              return interpretate(args[0], _objectSpread2(_objectSpread2({}, env), {}, {
-                "static": true
-              }));
-            }
-          }
-        }
-      }
-      return interpretate(args[0], env);
-    };
-    core.Medium = function () {
-      return 0.7;
-    };
-    core.Offload.update = function (args, env) {
-      if (args.length > 1) {
-        //alternative path - checking options
-        //do it in ugly superfast way
-
-        //Volitile -> False -> Reject updates
-
-        //low-level optimizations, we dont' need to spend time on parsing options
-        if (args[1][1] === "'Volatile'") {
-          if (!args[1][2]) {
-            console.log('Update was rejected (Nonvolatile)');
-            return;
-          }
-        } else if (args.length > 2) {
-          if (args[2][1] === "'Volatile'") {
-            if (!args[2][2]) {
-              console.log('Update was rejected (Nonvolatile)');
-              return;
-            }
-          }
-        }
-      }
-      return interpretate(args[0], env);
-    };
-    window.server.ask = function (what) {
-      var p = new Deferred();
-      if (what.length < 42) {
-        console.error('Unknown command');
-        console.error(what);
-        return false;
-      }
-      //throw what;
-      var offset = 'CoffeeLiqueur`Extensions`FrontendObject`Internal`GetObject["'.length;
-      if (Array.isArray(promises[what.slice(offset, -2)])) {
-        promises[what.slice(offset, -2)].push(p);
-      } else {
-        promises[what.slice(offset, -2)] = [p];
-      }
-      _fetchFile();
-      return p.promise;
-    };
-    window.server.getSymbol = function (name) {
-      var p = new Deferred();
-      console.warn('Asking for symbol' + name);
-      symbols[name] = p;
-      return p.promise;
-    };
-    interpretate.anonymous = /*#__PURE__*/function () {
-      var _ref1 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17(d, org) {
-        var name, data, p;
-        return _regeneratorRuntime().wrap(function _callee17$(_context17) {
-          while (1) switch (_context17.prev = _context17.next) {
-            case 0:
-              //TODO Check if it set delayed or set... if set, then one need only to cache it
-              console.log('Anonimous symbol: ' + JSON.stringify(d));
-              if (!(d instanceof Array)) {
-                _context17.next = 6;
-                break;
-              }
-              console.error(d);
-              //console.error(jsonStringifyRecursive(org.global.stack));
-              throw 'unknown WL expression. Error at ' + d[0];
-            case 6:
-              name = d; //symbol
-            case 7:
-              p = new Deferred();
-              console.warn('Asking for symbol' + name);
-              symbols[name] = p;
-              _context17.next = 12;
-              return p.promise;
-            case 12:
-              data = _context17.sent;
-              //if it is OK
-
-              core[name] = /*#__PURE__*/function () {
-                var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(args, env) {
-                  var data;
-                  return _regeneratorRuntime().wrap(function _callee14$(_context14) {
-                    while (1) switch (_context14.prev = _context14.next) {
-                      case 0:
-                        console.log('IE: calling our symbol...');
-                        //evaluate in the context
-                        _context14.next = 3;
-                        return interpretate(core[name].data, env);
-                      case 3:
-                        data = _context14.sent;
-                        if (env.root && !env.novirtual) core[name].instances[env.root.uid] = env.root; //if it was evaluated insdide the container, then, add it to the tracking list
-                        //if (env.hold) return ['JSObject', core[name].data];
-                        return _context14.abrupt("return", data);
-                      case 6:
-                      case "end":
-                        return _context14.stop();
-                    }
-                  }, _callee14);
-                }));
-                return function (_x23, _x24) {
-                  return _ref10.apply(this, arguments);
-                };
-              }();
-              core[name].update = /*#__PURE__*/function () {
-                var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15(args, env) {
-                  var data;
-                  return _regeneratorRuntime().wrap(function _callee15$(_context15) {
-                    while (1) switch (_context15.prev = _context15.next) {
-                      case 0:
-                        if (!env.useCache) {
-                          _context15.next = 7;
-                          break;
-                        }
-                        if (!(!core[name].cached || core[name].currentData != core[name].data)) {
-                          _context15.next = 6;
-                          break;
-                        }
-                        _context15.next = 4;
-                        return interpretate(core[name].data, env);
-                      case 4:
-                        core[name].cached = _context15.sent;
-                        core[name].currentData = core[name].data; //just copy the reference
-                        //console.log('cache miss');
-                      case 6:
-                        return _context15.abrupt("return", core[name].cached);
-                      case 7:
-                        _context15.next = 9;
-                        return interpretate(core[name].data, env);
-                      case 9:
-                        data = _context15.sent;
-                        return _context15.abrupt("return", data);
-                      case 11:
-                      case "end":
-                        return _context15.stop();
-                    }
-                  }, _callee15);
-                }));
-                return function (_x25, _x26) {
-                  return _ref11.apply(this, arguments);
-                };
-              }();
-              core[name].destroy = /*#__PURE__*/function () {
-                var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(args, env) {
-                  return _regeneratorRuntime().wrap(function _callee16$(_context16) {
-                    while (1) switch (_context16.prev = _context16.next) {
-                      case 0:
-                        delete core[name].instances[env.root.uid];
-                        console.warn(env.root.uid + ' was destroyed');
-                        console.warn('external symbol was destoryed');
-                      case 3:
-                      case "end":
-                        return _context16.stop();
-                    }
-                  }, _callee16);
-                }));
-                return function (_x27, _x28) {
-                  return _ref12.apply(this, arguments);
-                };
-              }();
-              core[name].data = data; //get the data
-
-              core[name].virtual = true;
-              core[name].instances = {};
-
-              //interpretate it AGAIN!
-              return _context17.abrupt("return", interpretate(d, org));
-            case 20:
-            case "end":
-              return _context17.stop();
-          }
-        }, _callee17);
-      }));
-      return function (_x21, _x22) {
-        return _ref1.apply(this, arguments);
-      };
-    }();
-    loadKernel();
+    fetch(json).then(function (data) {
+      console.warn('Store loaded!');
+      data.json().then(function (result) {
+        virtualServer.loadObjects(result);
+        if (kernel) loadKernel();
+      });
+    });
   });
-  console.log('DONE loading mesh');
   if (notebook) {
     return /*#__PURE__*/React.createElement("a", {
       href: notebook,
@@ -1286,9 +424,9 @@ function WLJSStore(_ref) {
   }
   return null;
 }
-function WLJSHTML(_ref13) {
-  var children = _ref13.children;
-    _ref13.data;
+function WLJSHTML(_ref3) {
+  var children = _ref3.children;
+    _ref3.data;
   var markup = {
     __html: decodeURIComponent(children)
   };
@@ -1296,13 +434,13 @@ function WLJSHTML(_ref13) {
     dangerouslySetInnerHTML: markup
   });
 }
-function WLJSEditor(_ref14) {
-  var children = _ref14.children;
-    _ref14.nid;
-    _ref14.id;
-    _ref14.type;
-    var display = _ref14.display,
-    opts = _ref14.opts;
+function WLJSEditor(_ref4) {
+  var children = _ref4.children;
+    _ref4.nid;
+    _ref4.id;
+    _ref4.type;
+    var display = _ref4.display,
+    opts = _ref4.opts;
   var ref = useRef(null);
   var decoded = decodeURIComponent(children);
   var _useState = useState(opts.Fade),
