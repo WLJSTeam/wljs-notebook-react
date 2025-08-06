@@ -4,6 +4,8 @@ const scripts = [
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-interpreter@base/dist/interpreter.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-interpreter@base/src/core.js",
 
+    "https://cdn.jsdelivr.net/gh/JerryI/wljs-wxf-accelerator@base/override.js",
+
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-export-html@base/Formats/MDX/Polyfill.js",
     "https://cdn.jsdelivr.net/gh/JerryI/wljs-export-html@base/DynamicsTools/Runners.js",
 
