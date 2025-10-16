@@ -1,10 +1,14 @@
 {
   "name": "wljs-notebook-react",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "dependencies": {
     "fs-extra": "^11.3.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",

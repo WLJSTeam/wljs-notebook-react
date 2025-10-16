@@ -345,12 +345,18 @@ function _unsupportedIterableToArray(r, a) {
   }
 }
 
+var cx = function cx() {
+  for (var _len = arguments.length, xs = new Array(_len), _key = 0; _key < _len; _key++) {
+    xs[_key] = arguments[_key];
+  }
+  return xs.filter(Boolean).join(' ');
+};
 function SvgIcon() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
-    "class": "w-5 h-5 ml-auto"
+    className: "w-5 h-5 ml-auto"
   }, /*#__PURE__*/React.createElement("path", {
     stroke: "currentColor",
     strokeLinecap: "round",
@@ -370,10 +376,6 @@ var DefaultClasses = {
     placeholder: 'opacity-0'
   }
 };
-
-/* pls, don't look at here. We don't know react and WLJS Ecosystem was not targeted to be used with JS frameworks */
-/* its ugly, but it gonna work, for sure */
-
 function WLJSStore(_ref) {
   var json = _ref.json,
     notebook = _ref.notebook,
@@ -488,17 +490,112 @@ function WLJSEditor(_ref4) {
   }, /*#__PURE__*/React.createElement("div", {
     className: faded ? "h-fade-20" : ""
   }, /*#__PURE__*/React.createElement("pre", {
-    tabIndex: "0",
-    className: DefaultClasses.codeBlock.pre
+    tabIndex: 0,
+    className: cx(DefaultClasses.codeBlock.pre)
   }, !loaded && /*#__PURE__*/React.createElement("code", {
-    className: [DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder].join(' ')
+    className: cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)
   }, decoded), /*#__PURE__*/React.createElement("code", {
-    className: DefaultClasses.codeBlock.code,
+    className: cx(DefaultClasses.codeBlock.code),
     ref: ref
   }))));
 }
+function WLJSAssets(_ref5) {
+  var children = _ref5.children;
+  var containerRef = React.useRef(null);
+  var disposersRef = React.useRef([]);
+  React.useLayoutEffect(function () {
+    var container = containerRef.current;
+    if (!container) return;
+    var cleanup = function cleanup() {
+      // call registered cleanup functions (LIFO for good measure)
+      for (var i = disposersRef.current.length - 1; i >= 0; i--) {
+        try {
+          disposersRef.current[i]();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      disposersRef.current = [];
+      // remove styles we appended
+      container.querySelectorAll('[data-wljs-style="1"]').forEach(function (n) {
+        return n.remove();
+      });
+    };
+    cleanup();
+
+    // decode
+    var decoded = "";
+    try {
+      decoded = decodeURIComponent(children);
+    } catch (_unused) {
+      decoded = String(children !== null && children !== void 0 ? children : "");
+    }
+    if (!decoded) return cleanup;
+
+    // parse
+    var tpl = document.createElement("template");
+    tpl.innerHTML = decoded;
+
+    // 1) append styles at this node (commit phase)
+    tpl.content.querySelectorAll("style").forEach(function (styleNode) {
+      var el = document.createElement("style");
+      el.dataset.wljsStyle = "1";
+      el.textContent = styleNode.textContent || "";
+      container.appendChild(el);
+    });
+
+    // 2) run each script body in isolation, in order
+    var scripts = Array.from(tpl.content.querySelectorAll("script"));
+
+    // AsyncFunction constructor
+    var AsyncFunction = Object.getPrototypeOf(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }))).constructor;
+    var runOne = function runOne(code, index) {
+      var registerCleanup = function registerCleanup(fn) {
+        if (typeof fn === "function") {
+          disposersRef.current.push(fn);
+        }
+      };
+
+      // per-script API; freeze to discourage mutation across scripts
+      var api = Object.freeze({
+        registerCleanup: registerCleanup,
+        element: container,
+        exports: Object.create(null),
+        index: index // which script is this (0-based)
+      });
+      var body = "\n        try {\n          ".concat(code, "\n        } catch (e) {\n          console.error(\"[WLJSAssets] script #").concat(index, " error:\", e);\n        }\n      ");
+      try {
+        var fn = new AsyncFunction("api", "el", body);
+        // starts synchronously until the first await
+        fn(api, container);
+      } catch (e) {
+        console.error("[WLJSAssets] build/run error for script #" + index + ":", e);
+      }
+    };
+    scripts.forEach(function (s, i) {
+      var code = s.textContent || "";
+      if (code.trim()) runOne(code, i);
+    });
+    return cleanup;
+  }, [children]);
+
+  // Anchor where styles get appended
+  return /*#__PURE__*/React.createElement("span", {
+    ref: containerRef,
+    "aria-hidden": "true"
+  });
+}
 
 exports.DefaultClasses = DefaultClasses;
+exports.WLJSAssets = WLJSAssets;
 exports.WLJSEditor = WLJSEditor;
 exports.WLJSHTML = WLJSHTML;
 exports.WLJSStore = WLJSStore;

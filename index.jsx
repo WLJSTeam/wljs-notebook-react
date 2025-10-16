@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import {useState} from 'react'
 
+const cx = (...xs) => xs.filter(Boolean).join(' ');
+
 function SvgIcon () { return (<>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 ml-auto" ><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17 17h.01m.39-3h.6c.932 0 1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C21 15.602 21 16.068 21 17s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C19.398 20 18.932 20 18 20H6c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C3 18.398 3 17.932 3 17s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C4.602 14 5.068 14 6 14h.6m5.4 1V4m0 11-3-3m3 3 3-3"></path></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-5 h-5 ml-auto" ><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17 17h.01m.39-3h.6c.932 0 1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C21 15.602 21 16.068 21 17s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C19.398 20 18.932 20 18 20H6c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C3 18.398 3 17.932 3 17s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C4.602 14 5.068 14 6 14h.6m5.4 1V4m0 11-3-3m3 3 3-3"></path></svg>
 </>)}
 
 export const DefaultClasses = {
@@ -17,9 +19,7 @@ export const DefaultClasses = {
     placeholder: 'opacity-0'
   }
 }
- 
-/* pls, don't look at here. We don't know react and WLJS Ecosystem was not targeted to be used with JS frameworks */
-/* its ugly, but it gonna work, for sure */
+
 
 export function WLJSStore({json, notebook, kernel}) {
 
@@ -117,16 +117,115 @@ export function WLJSEditor({children, nid, id, type, display, opts}) {
   return (
     <div className={DefaultClasses.codeBlock.wrapper}>
        <div className={ faded ? "h-fade-20" : ""}>
-          <pre tabIndex="0" className={DefaultClasses.codeBlock.pre}>
+          <pre tabIndex={0} className={cx(DefaultClasses.codeBlock.pre)}>
           {!loaded &&
-            <code className={[DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder].join(' ')}>{decoded}</code>
+            <code className={cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)}>{decoded}</code>
           }
-            <code className={DefaultClasses.codeBlock.code} ref={ref}></code> 
+            <code className={cx(DefaultClasses.codeBlock.code)} ref={ref} />
           </pre>
        </div>
     </div>   
   )
 }
+
+import { useLayoutEffect} from "react";
+
+
+export function WLJSAssets({ children }) {
+  const containerRef = useRef(null);
+  const disposersRef = useRef([]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const cleanup = () => {
+      // call registered cleanup functions (LIFO for good measure)
+      for (let i = disposersRef.current.length - 1; i >= 0; i--) {
+        try { disposersRef.current[i](); } catch (e) { console.error(e); }
+      }
+      disposersRef.current = [];
+      // remove styles we appended
+      container
+        .querySelectorAll('[data-wljs-style="1"]')
+        .forEach((n) => n.remove());
+    };
+
+    cleanup();
+
+    // decode
+    let decoded = "";
+    try { decoded = decodeURIComponent(children); }
+    catch { decoded = String(children ?? ""); }
+    if (!decoded) return cleanup;
+
+    // parse
+    const tpl = document.createElement("template");
+    tpl.innerHTML = decoded;
+
+    // 1) append styles at this node (commit phase)
+    tpl.content.querySelectorAll("style").forEach((styleNode) => {
+      const el = document.createElement("style");
+      el.dataset.wljsStyle = "1";
+      el.textContent = styleNode.textContent || "";
+      container.appendChild(el);
+    });
+
+    // 2) run each script body in isolation, in order
+    const scripts = Array.from(tpl.content.querySelectorAll("script"));
+
+    // AsyncFunction constructor
+    const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+
+    const runOne = (code, index) => {
+      // per-script cleanup bucket (kept globally so unmount can clean)
+      const localDisposers = [];
+      const registerCleanup = (fn) => {
+        if (typeof fn === "function") {
+          localDisposers.push(fn);
+          disposersRef.current.push(fn);
+        }
+      };
+
+      // per-script API; freeze to discourage mutation across scripts
+      const api = Object.freeze({
+        registerCleanup,
+        element: container,
+        exports: Object.create(null),
+        index, // which script is this (0-based)
+      });
+
+      const body = `
+        try {
+          ${code}
+        } catch (e) {
+          console.error("[WLJSAssets] script #${index} error:", e);
+        }
+      `;
+
+      try {
+        const fn = new AsyncFunction("api", "el", body);
+        // starts synchronously until the first await
+        fn(api, container);
+      } catch (e) {
+        console.error("[WLJSAssets] build/run error for script #"+index+":", e);
+      }
+    };
+
+    scripts.forEach((s, i) => {
+      const code = s.textContent || "";
+      if (code.trim()) runOne(code, i);
+    });
+
+    return cleanup;
+  }, [children]);
+
+  // Anchor where styles get appended
+  return <span ref={containerRef} aria-hidden="true" />;
+}
+
+
+
 
 
 
