@@ -370,7 +370,10 @@ var DefaultClasses = {
   codeBlock: {
     wrapper: 'text-sm px-2 py-2 bg-gray-15 shadow-sm rounded-md mx-2',
     pre: undefined,
-    code: undefined,
+    code: {
+      Input: 'block pl-1 rounded border-gray-300 border-l-4',
+      Output: 'block'
+    },
     placeholder: 'opacity-0'
   }
 };
@@ -491,12 +494,9 @@ function WLJSEditor(_ref4) {
     tabIndex: 0,
     className: cx(DefaultClasses.codeBlock.pre)
   }, !loaded && /*#__PURE__*/React.createElement("code", {
-    className: cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)
+    className: cx(DefaultClasses.codeBlock.code[type], DefaultClasses.codeBlock.placeholder)
   }, decoded), /*#__PURE__*/React.createElement("code", {
-    style: {
-      'borderLeft': type == 'Input' ? '4px solid rgba(15, 15, 15, 0.2)' : 'unset'
-    },
-    className: cx(DefaultClasses.codeBlock.code),
+    className: cx(DefaultClasses.codeBlock.code[type]),
     ref: ref
   }))));
 }

@@ -15,7 +15,10 @@ export const DefaultClasses = {
   codeBlock: {
     wrapper: 'text-sm px-2 py-2 bg-gray-15 shadow-sm rounded-md mx-2',
     pre: undefined,
-    code: undefined,
+    code: {
+      Input: 'block pl-1 rounded border-gray-300 border-l-4',
+      Output: 'block'
+    },
     placeholder: 'opacity-0'
   }
 }
@@ -119,9 +122,9 @@ export function WLJSEditor({children, nid, id, type, display, opts}) {
        <div className={ faded ? "h-fade-20" : ""}>
           <pre tabIndex={0} className={cx(DefaultClasses.codeBlock.pre)}>
           {!loaded &&
-            <code className={cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)}>{decoded}</code>
+            <code className={cx(DefaultClasses.codeBlock.code[type], DefaultClasses.codeBlock.placeholder)}>{decoded}</code>
           }
-            <code style={{'borderLeft': type == 'Input'? '4px solid rgba(15, 15, 15, 0.2)' : 'unset'}} className={cx(DefaultClasses.codeBlock.code)} ref={ref} />
+            <code className={cx(DefaultClasses.codeBlock.code[type])} ref={ref} />
           </pre>
        </div>
     </div>   
