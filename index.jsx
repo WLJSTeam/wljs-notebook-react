@@ -121,7 +121,7 @@ export function WLJSEditor({children, nid, id, type, display, opts}) {
           {!loaded &&
             <code className={cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)}>{decoded}</code>
           }
-            <code className={cx(DefaultClasses.codeBlock.code)} ref={ref} />
+            <code style={{'borderLeft': type == 'Input'? '4px solid rgba(15, 15, 15, 0.2)' : 'unset'}} className={cx(DefaultClasses.codeBlock.code)} ref={ref} />
           </pre>
        </div>
     </div>   

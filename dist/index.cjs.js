@@ -442,8 +442,8 @@ function WLJSEditor(_ref4) {
   var children = _ref4.children;
     _ref4.nid;
     _ref4.id;
-    _ref4.type;
-    var display = _ref4.display,
+    var type = _ref4.type,
+    display = _ref4.display,
     opts = _ref4.opts;
   var ref = React.useRef(null);
   var decoded = decodeURIComponent(children);
@@ -495,6 +495,9 @@ function WLJSEditor(_ref4) {
   }, !loaded && /*#__PURE__*/React.createElement("code", {
     className: cx(DefaultClasses.codeBlock.code, DefaultClasses.codeBlock.placeholder)
   }, decoded), /*#__PURE__*/React.createElement("code", {
+    style: {
+      'borderLeft': type == 'Input' ? '4px solid rgba(15, 15, 15, 0.2)' : 'unset'
+    },
     className: cx(DefaultClasses.codeBlock.code),
     ref: ref
   }))));
